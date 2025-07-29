@@ -1,4 +1,5 @@
 <?php
+include('conexao.php');
 if (!isset($_GET['id'])) {
     die("ID do Pokémon não fornecido.");
 }

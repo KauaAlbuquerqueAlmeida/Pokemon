@@ -1,7 +1,8 @@
 <?php
-$db = new PDO("sqlite:poke.db");
+include('conexao.php');
+
 $search = $_GET['busca'] ?? '';
-$stmt = $db->prepare("SELECT * FROM pokemons WHERE LOWER(nome) LIKE LOWER(?)");
+$stmt = $pdo->prepare("SELECT * FROM pokemons WHERE LOWER(nome) LIKE LOWER(?)");
 $stmt->execute(["%$search%"]);
 $pokemons = $stmt->fetchAll();
 ?>
@@ -82,12 +83,12 @@ $pokemons = $stmt->fetchAll();
   <div class="relatorio">
     <h2>📊 Estatísticas por Tipo</h2>
     <?php
-    $stats = $db->query("SELECT tipo, COUNT(*) as quantidade FROM pokemons GROUP BY tipo")->fetchAll();
+    $stats = $pdo->query("SELECT tipo, COUNT(*) as quantidade FROM pokemons GROUP BY tipo")->fetchAll();
     if (count($stats) === 0) {
       echo "<p>Nenhuma estatística para mostrar ainda.</p>";
     } else {
       foreach ($stats as $r) {
-        echo "<p><strong>{$r['tipo']}:</strong> {$r['quantidade']} Pokémon(s)</p>";
+        echo "<p><strong>" . htmlspecialchars($r['tipo']) . ":</strong> {$r['quantidade']} Pokémon(s)</p>";
       }
     }
     ?>
